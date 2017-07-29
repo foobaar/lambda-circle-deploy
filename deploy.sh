@@ -51,14 +51,12 @@ done
 
 configure_aws_cli(){
     note "configure_aws_cli"
-	  aws --version
-    aws_access_key=$"AWS_ACCESS_KEY_ID_$(echo ${environment^^})"
-    aws_secret_access_key=$"AWS_SECRET_ACCESS_KEY_$(echo ${environment^^})"
-	  aws configure set aws_access_key_id ${!aws_access_key}
-	  aws configure set aws_secret_access_key ${!aws_secret_access_key}
-	  aws configure set default.region us-east-1
-	  aws configure set default.output json
-	  success "aws cli successfully configured $(aws --version 2>&1)"
+    aws --version
+    aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}    
+    aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+    aws configure set default.region ${AWS_REGION}
+    aws configure set default.output json
+    success "aws cli successfully configured $(aws --version 2>&1)"
 }
 
 create_lambda_package(){
@@ -81,9 +79,9 @@ push_lambda_update() {
 
 set_environment_variables() {
     note "set env variables..."
-    prefix="APP_$(echo ${environment^^})_"
+    prefix="APP_"
     allEnvVariables=""
-    for OUTPUT in $(compgen -A variable | grep "APP_$(echo ${environment^^})_")
+    for OUTPUT in $(compgen -A variable | grep "APP_")
     do
         envKey=${OUTPUT#$prefix}
         envValue=${!OUTPUT}
