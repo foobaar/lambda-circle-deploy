@@ -1,0 +1,25 @@
+general:
+  branches:
+    only:
+      - master
+      
+machine:
+  node:
+    version: 6.11.0
+
+compile:
+  override:
+  - npm install --dev
+
+test:
+  override:
+    - npm run test
+
+deployment:
+  dev:
+    branch: master
+    commands:
+      - echo "Dev Deploy"
+      - ./deploy.sh
+          --env dev
+          --function_name test_function
